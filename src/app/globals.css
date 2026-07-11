@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #05060f;
+  --foreground: #e8eaf6;
 }
 
 @theme inline {
@@ -12,15 +12,87 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  cursor: none;
+}
+
+/* Restore normal cursor / scrolling on touch/coarse-pointer devices */
+@media (pointer: coarse) {
+  body {
+    cursor: auto;
+    overflow: auto;
+  }
+  html, body {
+    overflow: auto;
+  }
+}
+
+/* Custom cursor — hidden on touch devices */
+#cursor {
+  position: fixed;
+  pointer-events: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.9);
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  transition: width 0.2s, height 0.2s, background 0.2s;
+  mix-blend-mode: screen;
+}
+
+#cursor-ring {
+  position: fixed;
+  pointer-events: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  transition: transform 0.12s ease, width 0.3s, height 0.3s, border-color 0.3s;
+}
+
+@media (pointer: coarse) {
+  #cursor, #cursor-ring { display: none; }
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-hover {
+  background: rgba(255, 255, 255, 0.10);
+  border-color: rgba(139, 92, 246, 0.5);
+}
+
+/* Scrollbar hidden */
+::-webkit-scrollbar { display: none; }
+
+/* Keyframes used as CSS-only fallbacks */
+@keyframes pulse-ring {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50%       { transform: scale(1.15); opacity: 0.2; }
+}
+
+@keyframes mesh-drift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
